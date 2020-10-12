@@ -3,9 +3,10 @@
 
 // This program provides goal-oriented tested for M5Buttons
 
-#define SCORE_TOP     200
-#define SCORE_HEIGHT  32
-#define SCORE_FONT    4
+#define SCORE_TOP       200
+#define SCORE_HEIGHT    32
+#define SCORE_FONT      4
+#define LONG_PRESS_TIME 500
 
 // Defines gestures
 Gesture swipeRight("swipe right", 80, RIGHT, 30, true);
@@ -21,13 +22,13 @@ Button B(200, 80, 80, 80, false ,"B", off_clrs, on_clrs, MC_DATUM);
 
 
 Goal* current_goal = nullptr;
-Goal* goals[]      = { new TapAGoal(), new TapBGoal(), new DoubleTapAGoal(), new DoubleTapBGoal(), new TapBackgroundGoal(), new DoubleTapBackgroundGoal(),
-                       new DragFromAtoBGoal(), new DragFromBtoAGoal(), new DragFromAtoBackgroundGoal(), new DragFromBtoBackgroundGoal(), new DragFromBackgroundtoAGoal(),
-                       new DragFromBackgroundtoBGoal(), new SwipeUpGoal(), new SwipeDownGoal(), new SwipeLeftGoal(), new SwipeRightGoal() };
-
-
-
-
+Goal* goals[]      = { new TapAGoal(), new TapBGoal(), new DoubleTapAGoal(), new DoubleTapBGoal(),
+                       new LongPressAGoal(), new LongPressBackgroundGoal(), new LongPressBGoal(),
+                       new TapBackgroundGoal(), new DoubleTapBackgroundGoal(), new DragFromAtoBGoal(),
+                       new DragFromBtoAGoal(), new DragFromAtoBackgroundGoal(), new DragFromBtoBackgroundGoal(),
+                       new DragFromBackgroundtoAGoal(), new DragFromBackgroundtoBGoal(), new SwipeUpGoal(),
+                       new SwipeDownGoal(), new SwipeLeftGoal(), new SwipeRightGoal()
+                     };
 
 void eventHandler(Event& e) {
   if(current_goal) current_goal->event_handler(e);
@@ -49,6 +50,7 @@ void show_score(int successes, int failures) {
 
 void setup() {
   M5.begin();
+  A.longPressTime = B.longPressTime = M5.background.longPressTime = LONG_PRESS_TIME;
   M5.Lcd.fillScreen(NAVY);
   M5.Lcd.setTextSize(1);
   M5.Lcd.setTextColor(WHITE, NAVY);

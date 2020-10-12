@@ -26,16 +26,39 @@ bool  Goal::test() {
 //
 TapAGoal::TapAGoal() { name = "Tap the A Button"; }
 // Set success to true if all the conditions of the goal are met
-void TapAGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_TAP", evt.typeName())) && (0 == strcmp("A", evt.button->name()))) success = true;
+void TapAGoal::event_handler(Event& e) {
+  if((E_TAP == e) && (0 == strcmp("A", e.button->name()))) success = true;
 }
 
 
 //  Tap the B button
 //
 TapBGoal::TapBGoal() { name = "Tap the B Button"; }
-void TapBGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_TAP", evt.typeName())) && (0 == strcmp("B", evt.button->name()))) success = true;
+void TapBGoal::event_handler(Event& e) {
+  if((E_TAP == e) && (0 == strcmp("B", e.button->name()))) success = true;
+}
+
+// Long Press (LONG_PRESS_TIME mS) on the A Button
+//
+LongPressAGoal::LongPressAGoal() { name = "Long Press the A Button"; }
+void LongPressAGoal::event_handler(Event& e) {
+  if((E_LONGPRESSED == e) && (0 == strcmp("A", e.button->name()))) success = true;
+}
+
+
+// Long Press (LONG_PRESS_TIME mS) on the B Button
+//
+LongPressBGoal::LongPressBGoal() { name = "Long Press the B Button"; }
+void LongPressBGoal::event_handler(Event& e) {
+  if((E_LONGPRESSED == e) && (0 == strcmp("B", e.button->name()))) success = true;
+}
+
+
+// Long Press (LONG_PRESS_TIME mS) on the Background
+//
+LongPressBackgroundGoal::LongPressBackgroundGoal() { name = "Long Press the Background"; }
+void LongPressBackgroundGoal::event_handler(Event& e) {
+  if((E_LONGPRESSED == e) && (0 == strcmp("background", e.button->name()))) success = true;
 }
 
 
@@ -43,16 +66,16 @@ void TapBGoal::event_handler(Event& evt) {
 //
 DoubleTapAGoal::DoubleTapAGoal() { name = "Double Tap the A Button"; }
 // Set success to true if all the conditions of the goal are met
-void DoubleTapAGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_DBLTAP", evt.typeName())) && (0 == strcmp("A", evt.button->name()))) success = true;
+void DoubleTapAGoal::event_handler(Event& e) {
+  if((E_DBLTAP == e) && (0 == strcmp("A", e.button->name()))) success = true;
 }
 
 
 //  Double Tap the B button
 //
 DoubleTapBGoal::DoubleTapBGoal() { name = "Double Tap the B Button"; }
-void DoubleTapBGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_DBLTAP", evt.typeName())) && (0 == strcmp("B", evt.button->name()))) success = true;
+void DoubleTapBGoal::event_handler(Event& e) {
+  if((E_DBLTAP == e) && (0 == strcmp("B", e.button->name()))) success = true;
 }
 
 
@@ -60,16 +83,16 @@ void DoubleTapBGoal::event_handler(Event& evt) {
 //
 TapBackgroundGoal::TapBackgroundGoal() { name = "Tap the Background"; }
 // Set success to true if all the conditions of the goal are met
-void TapBackgroundGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_TAP", evt.typeName())) && (0 == strcmp("background", evt.button->name()))) success = true;
+void TapBackgroundGoal::event_handler(Event& e) {
+  if((E_TAP == e) && (0 == strcmp("background", e.button->name()))) success = true;
 }
 
 
 //  Double Tap the Background
 //
 DoubleTapBackgroundGoal::DoubleTapBackgroundGoal() { name = "Double Tap the Background"; }
-void DoubleTapBackgroundGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_DBLTAP", evt.typeName())) && (0 == strcmp("background", evt.button->name()))) success = true;
+void DoubleTapBackgroundGoal::event_handler(Event& e) {
+  if((E_DBLTAP == e) && (0 == strcmp("background", e.button->name()))) success = true;
 }
 
 
@@ -78,9 +101,9 @@ void DoubleTapBackgroundGoal::event_handler(Event& evt) {
 DragFromAtoBGoal::DragFromAtoBGoal() { name = "Drag From A to B"; }
 // The series of events I see is: E_TOUCH(A), E_MOVE(A)..., E_PRESSING(a), E_MOVE(A)..., E_RELEASE(A), E_DRAGGED(A)
 // Button never reflects another object; get position and test location.
-void DragFromAtoBGoal::event_handler(Event& evt) {
-  if(0 == strcmp("E_DRAGGED", evt.typeName())) {
-    if(A.contains(evt.from) && B.contains(evt.to)) success = true;
+void DragFromAtoBGoal::event_handler(Event& e) {
+  if(E_DRAGGED == e) {
+    if(A.contains(e.from) && B.contains(e.to)) success = true;
   }
 }
 
@@ -88,9 +111,9 @@ void DragFromAtoBGoal::event_handler(Event& evt) {
 // Drag from B to A
 //
 DragFromBtoAGoal::DragFromBtoAGoal() { name = "Drag From B to A"; }
-void DragFromBtoAGoal::event_handler(Event& evt) {
-  if(0 == strcmp("E_DRAGGED", evt.typeName())) {
-    if(B.contains(evt.from) && A.contains(evt.to)) success = true;
+void DragFromBtoAGoal::event_handler(Event& e) {
+  if(E_DRAGGED == e) {
+    if(B.contains(e.from) && A.contains(e.to)) success = true;
   }
 }
 
@@ -98,9 +121,9 @@ void DragFromBtoAGoal::event_handler(Event& evt) {
 // Drag from A to Background
 //
 DragFromAtoBackgroundGoal::DragFromAtoBackgroundGoal() { name = "Drag From A to Background"; }
-void DragFromAtoBackgroundGoal::event_handler(Event& evt) {
-  if(0 == strcmp("E_DRAGGED", evt.typeName())) {
-    if(A.contains(evt.from) && M5.background.contains(evt.to) && !A.contains(evt.to) && !B.contains(evt.to)) success = true;
+void DragFromAtoBackgroundGoal::event_handler(Event& e) {
+  if(E_DRAGGED == e) {
+    if(A.contains(e.from) && M5.background.contains(e.to) && !A.contains(e.to) && !B.contains(e.to)) success = true;
   }
 }
 
@@ -108,9 +131,9 @@ void DragFromAtoBackgroundGoal::event_handler(Event& evt) {
 // Drag from B to Background
 //
 DragFromBtoBackgroundGoal::DragFromBtoBackgroundGoal() { name = "Drag From B to Background"; }
-void DragFromBtoBackgroundGoal::event_handler(Event& evt) {
-  if(0 == strcmp("E_DRAGGED", evt.typeName())) {
-    if(B.contains(evt.from) && M5.background.contains(evt.to) && !A.contains(evt.to) && !B.contains(evt.to)) success = true;
+void DragFromBtoBackgroundGoal::event_handler(Event& e) {
+  if(E_DRAGGED == e) {
+    if(B.contains(e.from) && M5.background.contains(e.to) && !A.contains(e.to) && !B.contains(e.to)) success = true;
   }
 }
 
@@ -122,10 +145,10 @@ DragFromBackgroundtoAGoal::DragFromBackgroundtoAGoal() {
   can_succeed = true;
 }
 // You don't get an E_DRAGGED event if you start in the background, so return an error if one comes in.
-void DragFromBackgroundtoAGoal::event_handler(Event& evt) {
-  if(0 == strcmp("E_DRAGGED", evt.typeName())) can_succeed = false;
-  if(0 == strcmp("E_RELEASE", evt.typeName())) {
-    if(M5.background.contains(evt.from) && !A.contains(evt.from) && !B.contains(evt.from) && A.contains(evt.to)) success = can_succeed;
+void DragFromBackgroundtoAGoal::event_handler(Event& e) {
+  if(E_DRAGGED == e) can_succeed = false;
+  if(E_RELEASE == e) {
+    if(M5.background.contains(e.from) && !A.contains(e.from) && !B.contains(e.from) && A.contains(e.to)) success = can_succeed;
   }
 }
 
@@ -137,10 +160,10 @@ DragFromBackgroundtoBGoal::DragFromBackgroundtoBGoal() {
   can_succeed = true;
 }
 // You don't get an E_DRAGGED event if you start in the background, so return an error if one comes in.
-void DragFromBackgroundtoBGoal::event_handler(Event& evt) {
-  if(0 == strcmp("E_DRAGGED", evt.typeName())) can_succeed = false;
-  if(0 == strcmp("E_RELEASE", evt.typeName())) {
-    if(M5.background.contains(evt.from) && !A.contains(evt.from) && !B.contains(evt.from) && B.contains(evt.to)) success = can_succeed;
+void DragFromBackgroundtoBGoal::event_handler(Event& e) {
+  if(E_DRAGGED == e) can_succeed = false;
+  if(E_RELEASE == e) {
+    if(M5.background.contains(e.from) && !A.contains(e.from) && !B.contains(e.from) && B.contains(e.to)) success = can_succeed;
   }
 }
 
@@ -148,27 +171,27 @@ void DragFromBackgroundtoBGoal::event_handler(Event& evt) {
 // Swipe up detection
 //
 SwipeUpGoal::SwipeUpGoal() { name = "Swipe Up"; }
-void SwipeUpGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_GESTURE", evt.typeName())) && (0 == strcmp("swipe up", evt.gesture->name()))) success = true;
+void SwipeUpGoal::event_handler(Event& e) {
+  if((E_GESTURE == e) && (0 == strcmp("swipe up", e.gesture->name()))) success = true;
 }
 
 // Swipe down detection
 //
 SwipeDownGoal::SwipeDownGoal() { name = "Swipe Down"; }
-void SwipeDownGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_GESTURE", evt.typeName())) && (0 == strcmp("swipe down", evt.gesture->name()))) success = true;
+void SwipeDownGoal::event_handler(Event& e) {
+  if((E_GESTURE == e) && (0 == strcmp("swipe down", e.gesture->name()))) success = true;
 }
 
 // Swipe left detection
 //
 SwipeLeftGoal::SwipeLeftGoal() { name = "Swipe Left"; }
-void SwipeLeftGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_GESTURE", evt.typeName())) && (0 == strcmp("swipe left", evt.gesture->name()))) success = true;
+void SwipeLeftGoal::event_handler(Event& e) {
+  if((E_GESTURE == e) && (0 == strcmp("swipe left", e.gesture->name()))) success = true;
 }
 
 // Swipe right detection
 //
 SwipeRightGoal::SwipeRightGoal() { name = "Swipe Right"; }
-void SwipeRightGoal::event_handler(Event& evt) {
-  if((0 == strcmp("E_GESTURE", evt.typeName())) && (0 == strcmp("swipe right", evt.gesture->name()))) success = true;
+void SwipeRightGoal::event_handler(Event& e) {
+  if((E_GESTURE == e) && (0 == strcmp("swipe right", e.gesture->name()))) success = true;
 }
